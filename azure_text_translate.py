@@ -4,7 +4,7 @@ import uuid
 import json
 
 
-class TranslateText():
+class AzureTranslationServices():
 
     def __init__(self, azureTranslatorServiceKey, language):
         self.azureTranslatorServiceKey = azureTranslatorServiceKey
