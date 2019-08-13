@@ -2,24 +2,28 @@ from text2speech import TextToSpeech
 import os
 from pathlib import Path
 
-speechKey = os.environ['SPEECHKEY']
-translatorKey = os.environ['TRANSLATOR_TEXT_KEY']
+speechKey = None
+translatorKey = None
+
+try:
+    speechKey = os.environ['SPEECHKEY']
+    translatorKey = os.environ['TRANSLATOR_TEXT_KEY']
+except:
+    print("problem retrieving keys from environment variables")
 
 
 # https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/language-support#text-to-speech
 # https://docs.microsoft.com/en-au/azure/cognitive-services/Translator/reference/v3-0-languages?tabs=curl
 
-t2s = TextToSpeech(azureSpeechServiceKey=speechKey, voice='ko-KR-HeamiRUS', azureTranslatorServiceKey=translatorKey, translateToLanguage='ko', enableMemCache=True, enableDiskCache=True)
-t2s.play('granny smith scanned')
-t2s.play('granny smith scanned')
-t2s.play('red apple scanned')
-t2s.play('orange scanned')
-t2s.play('banana scanned')
+t2s = TextToSpeech(azureSpeechServiceKey=speechKey, voice='ko-KR-HeamiRUS', enableMemCache=True, enableDiskCache=True)
+t2s.play('빨간 사과 스캔')             # Red Apple
+t2s.play('녹색 사과를 스캔하였습니다')  # Green Apple
+t2s.play('오렌지를 스캔하였습니다')     # Orange
+t2s.play('바나나를 스캔하였습니다')     # Banana
 
-t2s = TextToSpeech(azureSpeechServiceKey=speechKey, enableMemCache=True, enableDiskCache=True)
-t2s.play("Starting scanner.")
-t2s.play("You scanned a Red Delicious Apple.")
-t2s.play("You scanned a Red Delicious Apple.")
-t2s.play("You scanned a Granny Smith Apple.")
-t2s.play("You scanned an Orange.")
-t2s.play("You scanned a Banana.")
+
+# t2s = TextToSpeech(azureSpeechServiceKey=speechKey, voice='ko-KR', enableMemCache=True, enableDiskCache=True)
+t2s.play("빨간 사과 스캔")  # Red Apple
+t2s.play("녹색 사과 스캔")  # Green Apple
+t2s.play("오렌지 스캔")     # Orange
+t2s.play("바나나 스캔")     # Banana
