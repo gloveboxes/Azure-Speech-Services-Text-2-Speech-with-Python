@@ -5,7 +5,7 @@ import hashlib
 from pathlib import Path
 import os
 from datetime import datetime
-import pyaudio
+from pygame import mixer
 import wave
 import io
 
@@ -27,34 +27,10 @@ class TextToSpeech():
         self.startSoundTime = datetime.min
         self.soundLength = 0.0
 
+        mixer.pre_init(frequency=16000, size=-16, channels=1)
+
         if not Path('.cache-audio').is_dir():
             os.mkdir('.cache-audio')
-
-    def _playAudio(self, audio):
-        CHUNK = 1024
-
-        f = io.BytesIO()
-        f.write(audio)
-        f.seek(0)
-        wf = wave.Wave_read(f)
-
-        p = pyaudio.PyAudio()
-
-        stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
-                        channels=wf.getnchannels(),
-                        rate=wf.getframerate(),
-                        output=True)
-
-        data = wf.readframes(CHUNK)
-
-        while data != b'':
-            stream.write(data)
-            data = wf.readframes(CHUNK)
-
-        time.sleep(0.2)
-        stream.stop_stream()
-        stream.close()
-        p.terminate()
 
     def play(self, text):
         if text is None or text == '':
@@ -94,5 +70,12 @@ class TextToSpeech():
                         audiofile.write(audio)
             if self.enableMemCache:
                 self.ttsAudio[digestKey] = audio
+        
+        
+        mixer.init()
+        
+        self.sound = mixer.Sound(audio)
+        self.sound.play()
+        time.sleep(self.sound.get_length())
 
-        self._playAudio(audio)
+        mixer.quit()

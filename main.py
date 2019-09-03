@@ -1,7 +1,14 @@
 # https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/language-support#text-to-speech
 # https://docs.microsoft.com/en-au/azure/cognitive-services/Translator/reference/v3-0-languages?tabs=curl
 
-from text2speech import TextToSpeech
+import platform
+
+# Uses PyGame on Windows and PyAudio on Linux and macOS
+if platform.system() == 'Windows':
+    from text2speech_windows import TextToSpeech
+else:
+    from text2speech import TextToSpeech
+
 import os
 from pathlib import Path
 import json
@@ -50,15 +57,15 @@ t2s = TextToSpeech(azureSpeechServiceKey=speechKey,
                    voice=speech_voice, enableMemCache=True, enableDiskCache=True)
 
 t2s.play(get_localised_text('Starting scanner'))
-time.sleep(1)
+time.sleep(0.5)
 
 t2s.play(get_localised_text('Green Apple'))
-time.sleep(1)
+time.sleep(0.5)
 
 t2s.play(get_localised_text('Red Apple'))
-time.sleep(1)
+time.sleep(0.5)
 
 t2s.play(get_localised_text('Orange'))
-time.sleep(1)
+time.sleep(0.5)
 
 t2s.play(get_localised_text('Banana'))
