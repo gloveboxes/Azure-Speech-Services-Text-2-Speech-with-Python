@@ -1,6 +1,36 @@
+# https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/language-support#text-to-speech
+# https://docs.microsoft.com/en-au/azure/cognitive-services/Translator/reference/v3-0-languages?tabs=curl
+
 from text2speech import TextToSpeech
 import os
 from pathlib import Path
+import json
+import time
+
+speech_map = None
+speech_voice = 'en-US-JessaNeural'
+
+speech_localisation_filename = 'speech_map_chinese.json'
+# speech_localisation_filename = 'speech_map_korean.json'
+
+
+def load_localisation():
+    global speech_map, speech_voice
+    if os.path.isfile(speech_localisation_filename):
+        with open(speech_localisation_filename, encoding='utf-8') as f:
+            json_data = json.load(f)
+            speech_voice = json_data.get('voice')
+            speech_map = json_data.get('map')
+
+
+def get_localised_text(key):
+    value = key
+    if speech_map is not None:
+        result = list(filter(lambda text: text['key'] == key, speech_map))
+        if len(result) > 0:
+            value = result[0]['value']
+    return value
+
 
 speechKey = None
 translatorKey = None
@@ -12,18 +42,23 @@ except:
     print("problem retrieving keys from environment variables")
 
 
-# https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/language-support#text-to-speech
-# https://docs.microsoft.com/en-au/azure/cognitive-services/Translator/reference/v3-0-languages?tabs=curl
-
-t2s = TextToSpeech(azureSpeechServiceKey=speechKey, voice='ko-KR-HeamiRUS', enableMemCache=True, enableDiskCache=True)
-t2s.play('빨간 사과 스캔')             # Red Apple
-t2s.play('녹색 사과를 스캔하였습니다')  # Green Apple
-t2s.play('오렌지를 스캔하였습니다')     # Orange
-t2s.play('바나나를 스캔하였습니다')     # Banana
 
 
-# t2s = TextToSpeech(azureSpeechServiceKey=speechKey, voice='ko-KR', enableMemCache=True, enableDiskCache=True)
-t2s.play("빨간 사과 스캔")  # Red Apple
-t2s.play("녹색 사과 스캔")  # Green Apple
-t2s.play("오렌지 스캔")     # Orange
-t2s.play("바나나 스캔")     # Banana
+load_localisation()
+
+t2s = TextToSpeech(azureSpeechServiceKey=speechKey,
+                   voice=speech_voice, enableMemCache=True, enableDiskCache=True)
+
+t2s.play(get_localised_text('Starting scanner'))
+time.sleep(1)
+
+t2s.play(get_localised_text('Green Apple'))
+time.sleep(1)
+
+t2s.play(get_localised_text('Red Apple'))
+time.sleep(1)
+
+t2s.play(get_localised_text('Orange'))
+time.sleep(1)
+
+t2s.play(get_localised_text('Banana'))

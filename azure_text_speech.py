@@ -20,8 +20,6 @@ class AzureSpeechServices(object):
         self.access_token = None
         self.access_token_ttl = 0
 
-        self.voice_list = self.get_voice_list()
-
     def get_token(self):
         '''
         The TTS endpoint requires an access token. This method exchanges your
@@ -30,25 +28,31 @@ class AzureSpeechServices(object):
         If time is less than 10 minutes then use the cached token
         '''
 
-        if self.subscription_key is None:
-            return
+        try:
+            if self.subscription_key is None:
+                return
 
-        if abs(time.time() - self.access_token_ttl) < 10 * 60:
-            return
+            if abs(time.time() - self.access_token_ttl) < 10 * 60:
+                return
 
-        fetch_token_url = TOKEN_URL
-        headers = {
-            'Ocp-Apim-Subscription-Key': self.subscription_key
-        }
-        response = requests.post(fetch_token_url, headers=headers)
-        self.access_token = str(response.text)
-        self.access_token_ttl = time.time()
+            fetch_token_url = TOKEN_URL
+            headers = {
+                'Ocp-Apim-Subscription-Key': self.subscription_key
+            }
+            response = requests.post(fetch_token_url, headers=headers)
+            self.access_token = str(response.text)
+            self.access_token_ttl = time.time()
+        except:
+            self.access_token = None
 
     def get_voice_list(self):
         if self.subscription_key is None:
             return
 
         self.get_token()
+
+        if self.access_token is None:
+            return None
 
         constructed_url = BASE_URL + VOICES_PATH
         headers = {
@@ -63,7 +67,11 @@ class AzureSpeechServices(object):
     def get_audio(self, text):
         if self.subscription_key is None:
             return
+            
         self.get_token()
+
+        if self.access_token is None:
+            return None
 
         constructed_url = BASE_URL + TEXT_TO_SPEECH_PATH
         headers = {
