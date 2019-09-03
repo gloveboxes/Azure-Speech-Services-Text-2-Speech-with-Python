@@ -55,7 +55,7 @@ class TextToSpeech():
                     if translatedText is None:
                         print(
                             'Text to Speech problem: Check internet connection or Translation key or language')
-                    return
+                        return
                 else:
                     translatedText = text
 
