@@ -16,7 +16,7 @@ else:
 
 speech_localisation_filename = 'speech_map_chinese.json'
 # speech_localisation_filename = 'speech_map_korean.json'
-speech_localisation_filename = 'speech_map_japanese.json'
+# speech_localisation_filename = 'speech_map_japanese.json'
 
 speechKey = None
 translatorKey = None
