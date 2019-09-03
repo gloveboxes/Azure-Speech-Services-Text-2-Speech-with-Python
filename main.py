@@ -18,6 +18,9 @@ speech_localisation_filename = 'speech_map_chinese.json'
 # speech_localisation_filename = 'speech_map_korean.json'
 speech_localisation_filename = 'speech_map_japanese.json'
 
+speechKey = None
+translatorKey = None
+
 
 class Localize():
 
@@ -52,9 +55,6 @@ class Localize():
                 value = result[0]['value']
         return value
 
-
-speechKey = None
-translatorKey = None
 
 try:
     speechKey = os.environ['SPEECHKEY']
