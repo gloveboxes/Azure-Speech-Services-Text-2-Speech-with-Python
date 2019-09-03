@@ -46,7 +46,7 @@ class Localize():
                 self.speech_translate = json_data.get('translate')
                 self.speech_map = json_data.get('map')
 
-    def get_localised_text(self, key):
+    def map(self, key):
         value = key
         if self.speech_map is not None:
             result = list(
@@ -70,17 +70,17 @@ t2s = TextToSpeech(azureSpeechServiceKey=speechKey, azureTranslatorServiceKey=tr
 t2s.play('hello my name is dave')
 t2s.play('Starting scanner')
 
-t2s.play(localize.get_localised_text('Starting scanner'))
+t2s.play(localize.map('Starting scanner'))
 time.sleep(0.5)
 
 t2s.play('You scanned a green apple')
-t2s.play(localize.get_localised_text('Green Apple'))
+t2s.play(localize.map('Green Apple'))
 time.sleep(0.5)
 
-t2s.play(localize.get_localised_text('Red Apple'))
+t2s.play(localize.map('Red Apple'))
 time.sleep(0.5)
 
-t2s.play(localize.get_localised_text('Orange'))
+t2s.play(localize.map('Orange'))
 time.sleep(0.5)
 
-t2s.play(localize.get_localised_text('Banana'))
+t2s.play(localize.map('Banana'))
