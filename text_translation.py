@@ -45,7 +45,7 @@ class TextTranslation():
             cacheFileName = os.path.join('.cache-text', cacheFileName)
 
             if self.enableDiskCache and Path(cacheFileName).is_file():
-                with open(cacheFileName, 'r') as textfile:
+                with open(cacheFileName, 'r', encoding="utf-8") as textfile:
                     translatedText = textfile.read()
             else:
                 translatedText = self.translateText.translate(text)
@@ -55,7 +55,7 @@ class TextTranslation():
                     return None
 
                 if self.enableDiskCache:
-                    with open(cacheFileName, 'w') as textfile:
+                    with open(cacheFileName, 'w', encoding="utf-8") as textfile:
                         textfile.write(translatedText)
             if self.enableMemCache:
                 self.translated_text[digestKey] = translatedText
