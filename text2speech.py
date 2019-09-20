@@ -1,5 +1,4 @@
 from azure_text_speech import AzureSpeechServices
-from azure_text_translate import AzureTranslationServices
 import time
 import hashlib
 from pathlib import Path
@@ -11,13 +10,8 @@ import io
 
 
 class TextToSpeech():
-    def __init__(self, azureSpeechServiceKey, voice='en-US-GuyNeural', azureTranslatorServiceKey=None, translateToLanguage=None, enableMemCache=False, enableDiskCache=False):
+    def __init__(self, azureSpeechServiceKey, voice='en-US-GuyNeural', enableMemCache=False, enableDiskCache=False):
         self.text2Speech = AzureSpeechServices(azureSpeechServiceKey, voice)
-        self.translateText = AzureTranslationServices(
-            azureTranslatorServiceKey, translateToLanguage)
-
-        self.azureTranslatorServiceKey = azureTranslatorServiceKey
-        self.translateToLanguage = translateToLanguage
         self.voice = voice
         self.enableMemCache = enableMemCache
         self.enableDiskCache = enableDiskCache
@@ -74,16 +68,7 @@ class TextToSpeech():
                 with open(cacheFileName, 'rb') as audiofile:
                     audio = audiofile.read()
             else:
-                if self.azureTranslatorServiceKey is not None and self.translateToLanguage is not None:
-                    translatedText = self.translateText.translate(text)
-                    if translatedText is None:
-                        print(
-                            'Text to Speech problem: Check internet connection or Translation key or language')
-                    return
-                else:
-                    translatedText = text
-
-                audio = self.text2Speech.get_audio(translatedText)
+                audio = self.text2Speech.get_audio(text)
                 if audio is None:
                     print(
                         'Text to Speech problem: Check internet connection or Speech key')
