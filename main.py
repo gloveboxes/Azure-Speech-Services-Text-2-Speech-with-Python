@@ -39,14 +39,15 @@ t2s.play(mandarin)
 mandarin = tt.translate('Neural voices provides very natural sounding speech')
 t2s.play(mandarin)
 
-
-
-
+mandarin = tt.translate('Hello, my name is Dave')
+t2s.play(mandarin)
 
 t2s.play(localize.map('Starting scanner'))
 time.sleep(0.5)
 
-t2s.play('You scanned a green apple')
+mandarin = tt.translate('You scanned a green apple')
+t2s.play(mandarin)
+
 t2s.play(localize.map('Green Apple'))
 time.sleep(0.5)
 
